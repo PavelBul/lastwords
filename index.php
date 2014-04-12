@@ -1,12 +1,26 @@
 <?php
-  function __autoload($className){
-     $fileName = "classes/".$className.".php";
-     include_once($fileName);
+  require("classes/config.php");
+
+  switch($config->force){
+
   }
 
-  $user = new Users();
-  $user->setUserInfo("Pavel","pavel@pavel.ru","asdasd");
-  $user->registrNewUser();
+  switch($config->action){
+      default:
+          $data['titleText'] = 'Добро пожаловать!';
+          $config->loadView('header',$data);
 
+          $config->loadView('index');
+          $config->loadView('footer');
+      break;
+
+      case 'registration':
+          $data['titleText'] = 'Регистрация!';
+          $config->loadView('header',$data);
+
+          $config->loadView('registration');
+          $config->loadView('footer');
+      break;
+  }
 
 ?>
