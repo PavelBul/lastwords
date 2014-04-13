@@ -3,10 +3,9 @@ require("classes/system.php");
 //Обработчики форм
 switch($system->action){
 
-
     //Регистрация нового пользователя
     case 'registrnewuser':
-        $user = new Users();
+        $users = new Users();
 
         //Валидация данных
         if (validation::isEmpty($_POST['userName']) || validation::isEmpty($_POST['userEmail']) || validation::isEmpty($_POST['userPass1']) || validation::isEmpty($_POST['userPass2'])){
@@ -23,6 +22,10 @@ switch($system->action){
             System::$errMsg[] = 'Неверно введен email';
         }
 
+        if ($users->searchUserByEmail($_POST['userEmail']))
+        {
+            System::$errMsg[] = 'Пользователь с таким Email уже существует!';
+        }
 
         if (System::$errMsg[0]){
             $data['titleText'] = 'Регистрация';
@@ -31,7 +34,13 @@ switch($system->action){
             $system->loadView('footer',$data);
         } else {
             $userIp = Client::getClientIP();
-            $user->insertNewUser($_POST['userName'],$_POST['userEmail'],$userPass,$userIp);
+            if ($users->insertNewUser($_POST['userName'],$_POST['userEmail'],$userPass,$userIp)){
+                //Вывод об успешной регистрации
+                echo "Регистрация прошла.";
+            } else {
+                $system->redirect('./registration.php',0);
+            }
+
         }
 
     break;
@@ -41,6 +50,7 @@ switch($system->action){
         $system->loadView('header',$data);
         $system->loadView('registration', $data);
         $system->loadView('footer');
+
     break;
 }
 

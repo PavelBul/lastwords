@@ -22,6 +22,7 @@ class System {
       include("views/".$view.".html");
   }
 
+  //Вывод ошибок
   public static function errorDisplay()
   {
       if (!empty(self::$errMsg[0]))
@@ -31,6 +32,11 @@ class System {
               echo "$errMsg <br>";
           }
       }
+  }
+
+  public function redirect($url,$sec = 0)
+  {
+     echo "<meta http-equiv='refresh' content='$sec; url=$url'/>";
   }
 
 }
