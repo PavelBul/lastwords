@@ -1,22 +1,25 @@
 <?php
 
 class Users {
-  private $_userName, $_userEmail, $_userPassword;
 
-  public function registrNewUser()
-  {
-      if (!empty($this->_userName) && !empty($this->_userEmail) && !empty($this->_userPassword)){
-          echo "Новый пользователь зарегистрирован!";
-      }
-      else {
-          echo "Не все поля заполнены!";
-      }
+  public function insertNewUser($userName,$userEmail,$userPass){
+    echo "Пользователь добавлен!";
+
   }
 
-  public function  setUserInfo($userName,$userEmail,$userPassword){
-      $this->_userName = $userName;
-      $this->_userEmail = $userEmail;
-      $this->_userPassword = $userPassword;
+  //Поиск пользователя по Email
+  public function searchUserByEmail($userEmail){
+     $query = db::run()->prepare("SELECT id FROM `users` WHERE user_email=?");
+     $query->bind_param('s',$userEmail);
+     $query->execute();
+     if ($query->num_rows) {
+         $query->bind_result($id);
+         $query->fetch();
+         return $id;
+     }
+     else{
+         return false;
+     }
   }
 
 }

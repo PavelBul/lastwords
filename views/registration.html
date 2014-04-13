@@ -1,1 +1,10 @@
+<? System::errorDisplay(); ?>
+
 <h1>Регистрация</h1>
+<form action="registration.php?action=registrNewUser" method="POST">
+    <input name="userName" placeholder="Введите имя">
+    <input name="userEmail" placeholder="Введите email">
+    <input name="userPass1" placeholder="Введите пароль">
+    <input name="userPass2" placeholder="Повторите пароль">
+    <input type="submit" value="Зарегестрироваться">
+</form>
