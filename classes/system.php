@@ -14,6 +14,7 @@ class System {
       }
 
       $this->action = strtolower($_REQUEST['action']);
+      session_start();
   }
 
   //Загрузка видов
@@ -23,7 +24,7 @@ class System {
   }
 
   //Вывод ошибок
-  public static function errorDisplay()
+  public static function displayErrors()
   {
       if (!empty(self::$errMsg[0]))
       {
@@ -42,4 +43,5 @@ class System {
 }
 
 $system = new System();
+$user = new User();
 ?>

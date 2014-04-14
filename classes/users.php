@@ -19,10 +19,23 @@ class Users {
          $query->bind_result($id);
          $query->fetch();
          return $id;
-     }
-     else{
+     } else {
          return false;
      }
+  }
+
+  public function searchUserByEmailAndPass($email,$pass){
+      $query = db::run()->prepare("SELECT id FROM `lw_users` WHERE user_email=? AND user_pass=?");
+      $query->bind_param('ss',$email,$pass);
+      $query->execute();
+      $query->store_result();
+      if ($query->num_rows){
+          $query->bind_result($id);
+          $query->fetch();
+          return $id;
+      } else {
+          return false;
+      }
   }
 
 
