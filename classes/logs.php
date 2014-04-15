@@ -7,5 +7,13 @@
  */
 
 class Logs {
+$text = "";
+$lo = fopen("log.txt","wr");
+  function zap()
+  {
+fwrite($lo, $text);
+
+
+  }
 
 }
