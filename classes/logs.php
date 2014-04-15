@@ -5,7 +5,7 @@ class Logs {
   public function zap($text)
   {
      $file = fopen('logs.txt',"a+");
-     fwrite($file, $text. "/n");
+     fwrite($file, $text."/n");
       fclose($file);
   }
 
