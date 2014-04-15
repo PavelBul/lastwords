@@ -47,6 +47,7 @@ class User {
         return $this->id;
     }
 
+    //Получаем статус пользователя
     public function getStatus()
     {
         return $this->status;

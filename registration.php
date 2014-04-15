@@ -5,6 +5,13 @@ switch($system->action){
 
     //Регистрация нового пользователя
     case 'registrnewuser':
+
+        if ($user->checkLogin())
+        {
+            //Перенаправление на личную страницу
+            break;
+        }
+
         $users = new Users();
 
         //Валидация данных
@@ -53,5 +60,4 @@ switch($system->action){
 
     break;
 }
-
 

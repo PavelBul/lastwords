@@ -40,6 +40,12 @@ class System {
      echo "<meta http-equiv='refresh' content='$sec; url=$url'/>";
   }
 
+  public function getMemaryUsage(){
+      $size = memory_get_usage();
+      $size = $size/1024/1024;
+      return $size;
+  }
+
 }
 
 $system = new System();
