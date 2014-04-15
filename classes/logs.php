@@ -6,6 +6,7 @@ class Logs {
   {
      $file = fopen('logs.txt',"a+");
      fwrite($file, $text);
+      fclose($file);s
   }
 
 }
