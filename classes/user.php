@@ -2,12 +2,14 @@
 //Класс работы с пользователем
 
 class User {
-    private $login = false, $id = '', $status = '';
+    private  $login = false, $id = '', $status = '';
 
     function __construct(){
           if (isset($_SESSION['userID'])) $this->id = $_SESSION['userID'];
           if (isset($_SESSION['userLogin'])) $this->login = $_SESSION['userLogin'];
-          if (isset($_SESSION['userStatus'])) $this->status = $_SESSION['userStatus'];
+          if (isset($_SESSION['userStatus'])) $this->status = $_SESSION['userStatus']; else {
+              $this->setUserStatus();
+          }
     }
 
     public function checkLogin(){
@@ -15,7 +17,7 @@ class User {
     }
 
     public function setUserStatus(){
-         $query = db::run()->prepare("SELECT `status` FROM `lw_users` WHERE id=?");
+         $query = db::run()->prepare("SELECT `user_status` FROM `lw_users` WHERE id=?");
          $query->bind_param('i',$this->id);
          $query->execute();
          $query->store_result();
@@ -47,10 +49,7 @@ class User {
         return $this->id;
     }
 
-    //Получаем статус пользователя
-    public function getStatus()
-    {
+    public function getStatus(){
         return $this->status;
     }
-
 }

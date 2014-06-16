@@ -1,22 +1,22 @@
 <?php
 require("classes/system.php");
+echo $user->getStatus();
+if ($user->checkLogin())
+{
+    $system->redirect('./cabinet.php');
+    exit;
+}
+
 //Обработчики форм
 switch($system->action){
 
     //Регистрация нового пользователя
     case 'registrnewuser':
-
-        if ($user->checkLogin())
-        {
-            //Перенаправление на личную страницу
-            break;
-        }
-
         $users = new Users();
 
         //Валидация данных
-        if (validation::isEmpty($_POST['userName']) || validation::isEmpty($_POST['userEmail']) || validation::isEmpty($_POST['userPass1']) || validation::isEmpty($_POST['userPass2'])){
-            System::$errMsg[] = 'Обязательные поля были не заполнены!';
+        if (validation::isEmpty($_POST['userEmail']) || validation::isEmpty($_POST['userPass1']) || validation::isEmpty($_POST['userPass2'])){
+            System::$errMsg[] = $language->l['eAllFields'];
         }
 
         if ($_POST['userPass1'] != $_POST['userPass2']){
@@ -35,15 +35,15 @@ switch($system->action){
         }
 
         if (System::$errMsg[0]){
-            $data['titleText'] = 'Регистрация';
-            $system->loadView('header',$data);
-            $system->loadView('registration',$data);
-            $system->loadView('footer',$data);
+            include('views/header.html');
+            include('views/registration.html');
+            include('views/footer.html');
         } else {
             $userIp = Client::getClientIP();
-            if ($users->insertNewUser($_POST['userName'],$_POST['userEmail'],$userPass,$userIp)){
-                //Вывод об успешной регистрации
-                echo "Регистрация прошла.";
+            if ($users->insertNewUser($_POST['userEmail'],$userPass,$userIp)){
+                $user->setLoginID($users->searchUserByEmailAndPass($_POST['userEmail'],$userPass));
+                $user->setLogin(true);
+                $system->redirect('./cabinet.php');
             } else {
                 $system->redirect('./registration.php',0);
             }
@@ -53,11 +53,9 @@ switch($system->action){
     break;
 
     default:
-        $data['titleText'] = 'Регистрация';
-        $system->loadView('header',$data);
-        $system->loadView('registration', $data);
-        $system->loadView('footer');
-
+        include('views/header.html');
+        include('views/registration.html');
+        include('views/footer.html');
     break;
 }
 

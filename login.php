@@ -4,7 +4,7 @@ switch($system->action){
     //Вход
     case 'login':
        $users = new Users();
-       if (!Validation::isEmpty($_POST['userEmail']) || !Validation::isEmpty($_POST['userPass'])){
+       if (Validation::isEmpty($_POST['userEmail']) || Validation::isEmpty($_POST['userPass'])){
           System::$errMsg[] = "Важные поля не были заполнены!";
        }
 
@@ -16,14 +16,21 @@ switch($system->action){
        if (!$userID)
        {
           System::$errMsg[] = "Пара логин и пароль не совпадают!";
-          $system->loadView('index');
+          include('views/index.html');
        } else {
-           $user->setLogin(true);
-           $user->setLoginID($userID);
-           $user->setUserStatus();
-           echo ("Вход выполнен!");
+          $user->setLogin(true);
+          $user->setLoginID($userID);
+          $user->setUserStatus();
+          $users->setUserLoginDate($userID);
+          $system->redirect('cabinet.php',0);
+
        }
 
+    break;
+
+    case 'logout':
+        session_destroy();
+        $system->redirect('index.php',0);
     break;
 
     default:

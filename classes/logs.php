@@ -1,4 +1,5 @@
 <?php
+//Логи
 
 class Logs {
 

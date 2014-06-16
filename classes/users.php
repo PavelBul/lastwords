@@ -3,9 +3,9 @@
 class Users {
 
   //Добавление нового пользователя в бд
-  public function insertNewUser($userName,$userEmail,$userPass,$userIp = ''){
-    $query = db::run()->prepare('INSERT INTO `lw_users` SET user_name=?, user_email=?, user_pass=?, reg_ip=? ');
-    $query->bind_param('ssss',$userName,$userEmail,$userPass,$userIp);
+  public function insertNewUser($userEmail,$userPass,$userIp = ''){
+    $query = db::run()->prepare('INSERT INTO `lw_users` SET  user_email=?, user_pass=?, reg_ip=? ');
+    $query->bind_param('sss',$userEmail,$userPass,$userIp);
     if ($query->execute()) return true; else return false;
   }
 
@@ -53,8 +53,37 @@ class Users {
       if ($query->execute()) return true; else return false;
   }
 
+  //Установка имени
+  public function setUserName($id, $name){
+      $query = db::run()->prepare("UPDATE `lw_users` SET user_name=? WHERE id=?");
+      $query->bind_param('si',$name,$id);
+      if ($query->execute()) return true; else return false;
+  }
+
+  //Установка фамилии
+  public function setUserSurname($id, $surname){
+      $query = db::run()->prepare("UPDATE `lw_users` SET user_surname=? WHERE id=?");
+      $query->bind_param('si',$surname,$id);
+      if ($query->execute()) return true; else return false;
+  }
+
+  //Установка отчества
+  public function setUserPatronymic($id, $patronymic){
+      $query = db::run()->prepare("UPDATE `lw_users` SET user_patronymic=? WHERE id=?");
+      $query->bind_param('si',$patronymic,$id);
+      if ($query->execute()) return true; else return false;
+  }
+
+  //обновление даты входа
+  public function setUserLoginDate($id){
+      $now = date("Y-m-d H:i:s");
+      $query = db::run()->prepare("UPDATE `lw_users` SET user_login_date=? WHERE id=?");
+      $query->bind_param('si',$now,$id);
+      if ($query->execute()) return true; else return false;
+  }
+
   //Обновление пароля
-  public function updateUserPassword($id,$pass){
+  public function setUserPassword($id,$pass){
       $query = db::run()->prepare("UPDATE `lw_users` SET user_pass=? WHERE id=?");
       $query->bind_param('si',$pass,$id);
       if ($query->execute()) return true; else return false;
@@ -99,9 +128,40 @@ class Users {
       return $userInfo;
   }
 
+  //Установка значения, использует ли пользователь секретное слово
   public function setUserUseSW($id,$use){
       $query = db::run()->prepare("UPDATE `lw_users` SET use_sw=? WHERE id=?");
       $query->bind_param('ii',$use, $id);
+      if ($query->execute()) return true; else return false;
+  }
+
+
+  //Заявка на востановления пароля
+  public function  userPassReset($userID){
+      $query = db::run()->prepare("INSERT INTO `lw_reset_password` SET rp_user_id=?, rp_secret_string=?");
+      $secretString = sha1(uniqid()).uniqid().sha1(uniqid());
+      $query->bind_param('is',$userID,$secretString);
+      if ($query->execute()) {
+          $query->store_result();
+          return $query->insert_id;
+      } else return false;
+  }
+
+  //Информация о восстановлении пароля
+  public function getPassResetInfo($secretString){
+      $query = db::run()->prepare("SELECT * FROM `lw_reset_password` WHERE rp_secret_string=?");
+      $query->bind_param('s',$secretString);
+      if ($query->execute()){
+          $result = $query->get_result();
+          if (!$result) return false;
+          return $result->fetch_assoc();
+      } else return false;
+  }
+
+  //Удаление заявок пользователя
+  public function unsetUserPassReset($userID){
+      $query = db::run()->prepare("DELETE FROM `lw_reset_password` WHERE rp_user_id=?");
+      $query->bind_param('i',$userID);
       if ($query->execute()) return true; else return false;
   }
 

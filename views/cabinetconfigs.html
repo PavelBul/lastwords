@@ -1,0 +1,18 @@
+<? System::displayErrors(); ?>
+
+<h1><?= $l['userConfigs']; ?></h1>
+<form action="cabinet.php?action=setsettings" method="POST">
+    <h3><?= $l['personalInformation'] ; ?></h3>
+    <input type="text" name="userName" placeholder="<? $l['enterUname']; ?>" value="<?= $data['user_name']; ?>"/>
+    <input type="text" name="userSurname" placeholder="<? $l['enterUsurname']; ?>" value="<?= $data['user_surname']; ?>"/>
+    <input type="text" name="userPatronymic" placeholder="<? $l['enterUpatronymic']; ?>" value="<?= $data['user_patronymic']; ?>"/>
+    <h3><?= $l['passwordSettings']; ?></h3>
+    <input type="password" name="userOldPass" placeholder="<?= $l['enterOldPassword']; ?>"/>
+    <input type="password" name="userNewPass" placeholder="<?= $l['enterNewPassword']; ?>"/>
+    <input type="password" name="userNewPass2" placeholder="<?= $l['repeatUpassword']; ?>"/>
+    <h4><?= $l['secretWord']; ?></h4>
+    <input type="password" name="secretWord" placeholder="<?= $l['enterSecretWord']; ?>"/>
+    <input type="submit" value="<?= $l['save']; ?>">
+</form>
+
+<a href="index.php"><?= $l['home']; ?></a>

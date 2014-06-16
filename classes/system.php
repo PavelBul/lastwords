@@ -1,26 +1,24 @@
 <?php
 
 class System {
-  public $action = '';
+  private $executeTime = 0;
+
+  public $action = '', $l = array();
   public static $errMsg = array();
 
-  //Загрузка классов
-  //action, force
 
-  public function __construct(){
+  //Загрузка классов
+  //action
+   public function __construct(){
+      session_start();
+      $this->executeTime = microtime(true);
+
       function __autoload($className){
           $fileName = $className.".php";
           include_once($fileName);
       }
 
       $this->action = strtolower($_REQUEST['action']);
-      session_start();
-  }
-
-  //Загрузка видов
-
-  public function loadView($view, $data = null){
-      include("views/".$view.".html");
   }
 
   //Вывод ошибок
@@ -46,8 +44,17 @@ class System {
       return $size;
   }
 
+  public function getExecuteTime(){
+      return microtime(true) - $this->executeTime;
+  }
+
+
+
 }
 
 $system = new System();
 $user = new User();
+$language = new Language();
+$l = $language->getWords();
+
 ?>

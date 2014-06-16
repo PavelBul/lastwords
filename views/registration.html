@@ -2,9 +2,9 @@
 
 <h1>Регистрация</h1>
 <form action="registration.php?action=registrNewUser" method="POST">
-    <input type="text" name="userName" placeholder="Введите имя">
-    <input type="email" name="userEmail" placeholder="Введите email">
-    <input type="password" name="userPass1" placeholder="Введите пароль">
-    <input type="password" name="userPass2" placeholder="Повторите пароль">
-    <input type="submit" value="Зарегестрироваться">
+    <input type="email" name="userEmail" placeholder="<?= $l['enterUemail']; ?>">
+    <input type="password" name="userPass1" placeholder="<?= $l['enterUpassword']; ?>">
+    <input type="password" name="userPass2" placeholder="<?= $l['repeatUpassword']; ?>">
+    <input type="submit" value="<?= $l['complite']; ?>">
 </form>
+<a href="index.php"><?= $l['home']; ?></a>
